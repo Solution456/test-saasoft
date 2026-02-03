@@ -1,9 +1,9 @@
 # test-saasoft
 
 
-## Project Setup
+## Запуск
 
-### Docker
+### С помощью Docker
 ```sh
 docker-compose up --build my-app-1
 ```

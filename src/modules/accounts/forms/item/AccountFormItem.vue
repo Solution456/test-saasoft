@@ -34,7 +34,7 @@ const props = defineProps<{
 const tags = defineModel('tags')
 const type = defineModel<AccountRecordType>('type')
 const login = defineModel<string>('login')
-const password = defineModel<string>('password')
+const password = defineModel<string | null>('password')
 
 const localTags = ref(transformTagsToString(props.model.tags))
 
@@ -48,7 +48,7 @@ function onChangeTags(value: string) {
 
 function onChangeType(value: string) {
   if (value === ACCOUNT_RECORD_TYPE.Ldap) {
-    password.value = ''
+    password.value = null
   }
 }
 </script>
