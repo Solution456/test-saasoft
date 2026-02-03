@@ -5,7 +5,7 @@
 
 ### Docker
 ```sh
-docker-compose up --build my-app
+docker-compose up --build my-app-1
 ```
 
 ### Без докера
