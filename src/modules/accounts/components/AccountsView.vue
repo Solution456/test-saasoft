@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ElAlert } from 'element-plus'
 
+import AccountsForm from '../forms/AccountsForm.vue'
+
 import AccountsHead from './AccountsHead.vue'
 
 import Flex from '@/shared/utility/Flex.vue'
@@ -19,12 +21,13 @@ import Flex from '@/shared/utility/Flex.vue'
       show-icon
       :closable="false"
     />
+    <AccountsForm />
   </Flex>
 </template>
 
 <style scoped lang="scss">
 .accounts {
-  max-width: 700px;
+  max-width: 1000px;
   width: 100%;
 }
 </style>

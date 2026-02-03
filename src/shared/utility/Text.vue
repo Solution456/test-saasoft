@@ -17,6 +17,7 @@ const props = withDefaults(
     size?: TextSize
     weight?: TextWeight
     color?: string
+    center?: boolean
   }>(),
   {
     as: 'p',
@@ -27,7 +28,8 @@ const props = withDefaults(
 
 const classes = computed(() => {
   return {
-    [`text-${props.weight}-${props.size}`]: ['span', 'p'].includes(props.as)
+    [`text-${props.weight}-${props.size}`]: ['span', 'p'].includes(props.as),
+    'text-center': props.center
   }
 })
 
@@ -52,6 +54,10 @@ const styles = computed(() => {
 <style scoped lang="scss">
 .text {
   color: var(--color-text);
+
+  &-center {
+    text-align: center;
+  }
 
   &-bold-extra-large {
     font-weight: 700;
