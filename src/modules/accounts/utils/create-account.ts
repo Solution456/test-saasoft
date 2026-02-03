@@ -5,9 +5,13 @@ export function createEmptyAccount(): Account {
   const uuid = crypto.randomUUID()
   return {
     id: uuid,
-    tags: [],
+    tags: [
+      {
+        text: ''
+      }
+    ],
     login: '',
-    password: '',
+    password: null,
     type: ACCOUNT_RECORD_TYPE.Local
   }
 }

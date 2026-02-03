@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import {
   ElButton,
   ElForm,
@@ -10,12 +10,16 @@ import {
 } from 'element-plus'
 
 import { ACCOUNT_TYPE_OPTIONS } from '../../constants/account-type-options'
+import {
+  transformTagsFromString,
+  transformTagsToString
+} from '../../helpers/transform-tags'
 import type { Account } from '../../types'
 import {
   ACCOUNT_RECORD_TYPE,
   type AccountRecordType
 } from '../../types/constants'
-import { getAccountFormItemRules } from '../validation/AccountFormItemRules'
+import { getAccountFormItemRules } from '../validation/account-form-item.rules'
 
 interface Emit {
   deleteItem: [id: string | number]
@@ -23,7 +27,7 @@ interface Emit {
 
 const emit = defineEmits<Emit>()
 
-defineProps<{
+const props = defineProps<{
   model: Account
 }>()
 
@@ -32,9 +36,15 @@ const type = defineModel<AccountRecordType>('type')
 const login = defineModel<string>('login')
 const password = defineModel<string>('password')
 
+const localTags = ref(transformTagsToString(props.model.tags))
+
 const rules = reactive(getAccountFormItemRules())
 
 const isLdap = computed(() => type.value === ACCOUNT_RECORD_TYPE.Ldap)
+
+function onChangeTags(value: string) {
+  tags.value = transformTagsFromString(value)
+}
 
 function onChangeType(value: string) {
   if (value === ACCOUNT_RECORD_TYPE.Ldap) {
@@ -55,8 +65,9 @@ function onChangeType(value: string) {
       style="width: 200px; flex-shrink: 0"
     >
       <ElInput
-        v-model="tags"
+        v-model="localTags"
         placeholder="Метки"
+        @change="onChangeTags"
       />
     </ElFormItem>
     <ElFormItem
@@ -92,6 +103,8 @@ function onChangeType(value: string) {
     >
       <ElInput
         v-model="password"
+        type="password"
+        show-password
         placeholder="Пароль"
       />
     </ElFormItem>
