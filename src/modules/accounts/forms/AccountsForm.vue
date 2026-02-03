@@ -1,27 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElButton } from 'element-plus'
+import { storeToRefs } from 'pinia'
 
-import type { Account } from '../types'
-import { createEmptyAccount } from '../utils/create-account'
+import { useAccountStore } from '../store/account.store'
 
 import AccountFormItem from './item/AccountFormItem.vue'
 
 import Flex from '@/shared/utility/Flex.vue'
 import Text from '@/shared/utility/Text.vue'
 
-const state = ref<Account[]>([])
+const store = useAccountStore()
 
-function addAccount() {
-  state.value.push(createEmptyAccount())
-}
-
-function removeAccount(id: string | number) {
-  state.value.splice(
-    state.value.findIndex((item) => item.id === id),
-    1
-  )
-}
+const { state } = storeToRefs(store)
 </script>
 
 <template>
@@ -30,12 +19,6 @@ function removeAccount(id: string | number) {
     direction="column"
     gap="12px"
   >
-    <ElButton
-      type="primary"
-      @click="addAccount"
-    >
-      +
-    </ElButton>
     <Flex
       class="accounts-form-header"
       align="center"
@@ -80,10 +63,9 @@ function removeAccount(id: string | number) {
           v-model:login="acc.login"
           v-model:password="acc.password"
           :model="acc"
+          @delete-item="store.removeAccountItem(acc.id)"
         />
       </Flex>
     </div>
   </Flex>
 </template>
-
-<style scoped></style>

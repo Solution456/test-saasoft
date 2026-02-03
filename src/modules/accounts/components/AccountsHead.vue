@@ -3,6 +3,12 @@ import { ElButton } from 'element-plus'
 
 import Flex from '@/shared/utility/Flex.vue'
 import Text from '@/shared/utility/Text.vue'
+
+interface Emit {
+  createAccount: []
+}
+
+const emit = defineEmits<Emit>()
 </script>
 
 <template>
@@ -16,6 +22,11 @@ import Text from '@/shared/utility/Text.vue'
     >
       Учетные записи
     </Text>
-    <ElButton type="primary"> + </ElButton>
+    <ElButton
+      type="primary"
+      @click="emit('createAccount')"
+    >
+      +
+    </ElButton>
   </Flex>
 </template>

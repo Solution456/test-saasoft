@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 import {
   ElButton,
   ElForm,
@@ -11,16 +11,28 @@ import {
 
 import { ACCOUNT_TYPE_OPTIONS } from '../../constants/account-type-options'
 import type { Account } from '../../types'
-import { ACCOUNT_RECORD_TYPE } from '../../types/constants'
+import {
+  ACCOUNT_RECORD_TYPE,
+  type AccountRecordType
+} from '../../types/constants'
+import { getAccountFormItemRules } from '../validation/AccountFormItemRules'
+
+interface Emit {
+  deleteItem: [id: string | number]
+}
+
+const emit = defineEmits<Emit>()
 
 defineProps<{
   model: Account
 }>()
 
 const tags = defineModel('tags')
-const type = defineModel('type')
-const login = defineModel('login')
-const password = defineModel('password')
+const type = defineModel<AccountRecordType>('type')
+const login = defineModel<string>('login')
+const password = defineModel<string>('password')
+
+const rules = reactive(getAccountFormItemRules())
 
 const isLdap = computed(() => type.value === ACCOUNT_RECORD_TYPE.Ldap)
 
@@ -35,15 +47,22 @@ function onChangeType(value: string) {
   <ElForm
     :inline="true"
     :model="model"
+    :rules="rules"
     class="accounts-form-item"
   >
-    <ElFormItem style="width: 200px; flex-shrink: 0">
+    <ElFormItem
+      prop="tags"
+      style="width: 200px; flex-shrink: 0"
+    >
       <ElInput
         v-model="tags"
         placeholder="Метки"
       />
     </ElFormItem>
-    <ElFormItem style="width: 150px; flex-shrink: 0">
+    <ElFormItem
+      prop="type"
+      style="width: 150px; flex-shrink: 0"
+    >
       <ElSelect
         v-model="type"
         placeholder="Тип записи"
@@ -57,7 +76,10 @@ function onChangeType(value: string) {
         />
       </ElSelect>
     </ElFormItem>
-    <ElFormItem :style="{ width: isLdap ? '100%' : '200px' }">
+    <ElFormItem
+      prop="login"
+      :style="{ width: isLdap ? '100%' : '200px' }"
+    >
       <ElInput
         v-model="login"
         placeholder="Логин"
@@ -65,6 +87,7 @@ function onChangeType(value: string) {
     </ElFormItem>
     <ElFormItem
       v-if="!isLdap"
+      prop="password"
       :style="{ width: '200px' }"
     >
       <ElInput
@@ -73,7 +96,12 @@ function onChangeType(value: string) {
       />
     </ElFormItem>
     <ElFormItem>
-      <ElButton type="primary"> del </ElButton>
+      <ElButton
+        type="primary"
+        @click="emit('deleteItem', model.id)"
+      >
+        del
+      </ElButton>
     </ElFormItem>
   </ElForm>
 </template>

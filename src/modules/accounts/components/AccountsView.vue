@@ -2,10 +2,13 @@
 import { ElAlert } from 'element-plus'
 
 import AccountsForm from '../forms/AccountsForm.vue'
+import { useAccountStore } from '../store/account.store'
 
 import AccountsHead from './AccountsHead.vue'
 
 import Flex from '@/shared/utility/Flex.vue'
+
+const store = useAccountStore()
 </script>
 
 <template>
@@ -14,7 +17,7 @@ import Flex from '@/shared/utility/Flex.vue'
     gap="1rem"
     class="accounts"
   >
-    <AccountsHead />
+    <AccountsHead @create-account="store.createAccountItem" />
     <ElAlert
       title="Для указания нескольких меток для одной пары логин/пароль используйте разделитель ;"
       type="primary"
